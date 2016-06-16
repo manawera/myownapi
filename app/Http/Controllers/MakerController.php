@@ -13,6 +13,11 @@ use App\Http\Requests\CreateMakerRequest;
 
 class MakerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.basic');
+    }
+
     public function index()
     {
     	$makers = Maker::all();
