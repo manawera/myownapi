@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -45,6 +48,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        if ($e instanceof NotFoundHttpException)
+        {
+            return response()->json(['message' => 'Bad request, please verify your request route', 'code' => 400], 400);
+        }
+        else
+        {
+            return response()->json(['message' => 'Unexpected error, try again later', 'code' => 500], 500);
+        }
     }
 }
